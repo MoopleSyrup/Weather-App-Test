@@ -22,8 +22,8 @@ searchButton.addEventListener('click', () => {
 
 // Function to Fetch Weather Data
 async function fetchWeather(city) {
-    const apiKey = '8fb5b63e41a445397e91f9005c5438fd'; // Replace with your OpenWeatherMap API key
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?units=metric&q=`;
+    const apiKey = '8fb5b63e41a445397e91f9005c5438fd'; // Replace with a secure method
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?units=metric&q=${city}&appid=${apiKey}`;
 
     try {
         // Show loading spinner
@@ -34,13 +34,17 @@ async function fetchWeather(city) {
         const response = await fetch(apiUrl);
         const data = await response.json();
 
-        if (data.cod === 200) {
+        if (data.cod === 200 && data.weather && data.main && data.wind) {
+            const weatherCondition = data.weather[0].main.toLowerCase();
+
             // Update weather information
-            weatherIcon.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
             temperature.textContent = `${Math.round(data.main.temp)}°C`;
             cityName.textContent = data.name;
             humidity.textContent = `${data.main.humidity}%`;
             windSpeed.textContent = `${data.wind.speed} km/h`;
+
+            // Update local weather icon
+            updateWeatherIcon(weatherCondition);
 
             // Show weather information
             weatherInfo.style.display = 'block';
@@ -53,6 +57,38 @@ async function fetchWeather(city) {
         // Hide loading spinner
         loadingSpinner.style.display = 'none';
     }
+}
+
+// Function to Update Weather Icon Using Local Images
+function updateWeatherIcon(weatherCondition) {
+    let iconSrc = 'images/clear.png'; // Default icon
+
+    const iconMap = {
+        clear: 'images/clear.png',
+        clouds: 'images/clouds.png',
+        rain: 'images/rain.png',
+        drizzle: 'images/drizzle.png',
+        thunderstorm: 'images/thunder.png',
+        snow: 'images/snow.png',
+        mist: 'images/mist.png',
+        fog: 'images/mist.png',
+        haze: 'images/mist.png',
+        smoke: 'images/mist.png',
+        dust: 'images/dust.png',
+        sand: 'images/dust.png',
+        ash: 'images/dust.png',
+        squall: 'images/wind.png',
+        tornado: 'images/tornado.png',
+    };
+
+    // Check if condition exists in the iconMap
+    if (iconMap[weatherCondition]) {
+        iconSrc = iconMap[weatherCondition];
+    }
+
+    // Apply the new icon
+    weatherIcon.src = iconSrc;
+    weatherIcon.alt = weatherCondition.charAt(0).toUpperCase() + weatherCondition.slice(1);
 }
 
 // Function to Show Error Message
