@@ -91,23 +91,3 @@ body{
     margin-top: 10px;
     display: none;
 }
-
- /* Weather-specific colors */
-.clear {
-    background-color: #87CEEB; /* Light blue for clear skies */
-}
-.cloudy {
-    background-color: #A9A9A9; /* Gray for cloudy */
-}
-.rain {
-    background-color: #4682B4; /* Blue for rain */
-}
-.storm {
-    background-color: #4B0082; /* Dark purple for storms */
-}
-.snow {
-    background-color: #E0FFFF; /* Light cyan for snow */
-}
-.fog {
-    background-color: #D3D3D3; /* Light gray for fog */
-}
